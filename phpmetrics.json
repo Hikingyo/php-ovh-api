@@ -1,0 +1,17 @@
+{
+    "includes": [
+        "src"
+    ],
+    "exclude": [
+        "tests"
+    ],
+    "report": {
+        "html": "report/html/",
+        "violations": "report/violations.xml"
+    },
+    "plugins": {
+        "git": {
+            "binary": "git"
+        }
+    }
+}
