@@ -11,7 +11,6 @@ use Psr\Http\Message\StreamFactoryInterface;
 
 /**
  * @internal
- * @coversNothing
  */
 class HttpClientFactoryTest extends TestCase
 {

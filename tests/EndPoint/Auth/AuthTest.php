@@ -8,11 +8,10 @@ use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @internal
- * @coversNothing
  */
 class AuthTest extends TestCase
 {
-    public function testTime()
+    public function testTime(): void
     {
         $expected = 1488291201;
 

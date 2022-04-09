@@ -8,7 +8,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @internal
- * @coversNothing
  */
 class DomainTest extends TestCase
 {
