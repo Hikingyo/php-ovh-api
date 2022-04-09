@@ -1,0 +1,33 @@
+name: Coverage
+on: [push, pull_request]
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php_versions: ['7.4', '8.0', '8.1']
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup PHP ${{ matrix.php_version }}
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php_versions }}
+        extensions: json
+        coverage: xdebug
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-interaction
+    - name: generate coverage report
+      run: vendor/bin/phpunit --coverage-clover ./coverage/reports/clover.xml
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v2
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        directory: ./coverage/reports/
+        env_vars: OS,PYTHON
+        fail_ci_if_error: true
+        files: clover.xml
+        flags: unittests
+        name: codecov-umbrella
+        verbose: true

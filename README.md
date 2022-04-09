@@ -13,6 +13,7 @@ This project is inspired by [GitLab PHP API Client](https://github.com/GitLabPHP
 <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square" alt="Software License"/></a>
 <a href="https://packagist.org/packages/hikingyo/php-ovh-api"><img src="https://img.shields.io/packagist/dt/hikingyo/php-ovh-api?style=flat-square" alt="Packagist Downloads"/></a>
 <a href="https://github.com/Hikingyo/php-ovh-api/releases"><img src="https://img.shields.io/github/v/release/Hikingyo/php-ovh-api?display_name=tag&include_prereleases" alt="Latest Version"/></a>
+<a href="https://codecov.io/gh/Hikingyo/php-ovh-api"><img src="https://codecov.io/gh/Hikingyo/php-ovh-api/branch/develop/graph/badge.svg?token=MCB7ORSZA5"/></a>
 
 </p>
 
