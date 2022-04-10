@@ -2,7 +2,8 @@
 
 namespace Hikingyo\Ovh\Tests\HttpClient;
 
-use Hikingyo\Ovh\HttpClient\QueryStringBuilder;
+use Generator;
+use Hikingyo\Ovh\HttpClient\QueryFragmentBuilder;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -15,10 +16,11 @@ class QueryStringBuilderTest extends TestCase
      */
     public function testBuild(array $query, string $expected): void
     {
-        $this->assertSame(\sprintf('?%s', $expected), QueryStringBuilder::build($query));
+        $queryStringBuilder = new QueryFragmentBuilder();
+        $this->assertSame(\sprintf('?%s', $expected), $queryStringBuilder->buildFragments($query));
     }
 
-    public function queryStringProvider()
+    public function queryStringProvider(): Generator
     {
         yield 'indexed array' => [
             [

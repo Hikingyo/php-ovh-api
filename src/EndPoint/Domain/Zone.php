@@ -3,9 +3,9 @@
 namespace Hikingyo\Ovh\EndPoint\Domain;
 
 use Hikingyo\Ovh\EndPoint\AbstractEndPoint;
-use Hikingyo\Ovh\Exception\InvalidParameterException;
 use Hikingyo\Ovh\Validator\DomainValidator;
 use Http\Client\Exception;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class Zone extends AbstractEndPoint
 {
@@ -17,7 +17,6 @@ class Zone extends AbstractEndPoint
     /**
      * GET /domain/zone.
      *
-     * @throws InvalidParameterException
      * @throws Exception
      */
     public function list()
@@ -28,7 +27,6 @@ class Zone extends AbstractEndPoint
     /**
      * GET /domain/zone/{zoneName}.
      *
-     * @throws InvalidParameterException
      * @throws Exception
      */
     public function one(string $zoneName)
@@ -39,14 +37,13 @@ class Zone extends AbstractEndPoint
     /**
      * GET /domain/zone/{zoneName}/record.
      *
-     * @throws InvalidParameterException
      * @throws Exception
      */
-    public function getRecords(string $domain, string $fieldType = '', string $subDomain = ''): array
+    public function getRecords(string $domain, string $fieldType = null, string $subDomain = null): array
     {
         $recordUri = sprintf('%s/%s/record', self::URL, $domain);
 
-        $optionsResolver = $this->getOptionResolver();
+        $optionsResolver = new OptionsResolver();
 
         $optionsResolver
             ->setDefined('subDomain')

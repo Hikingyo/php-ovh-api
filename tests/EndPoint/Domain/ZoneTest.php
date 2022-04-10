@@ -4,7 +4,7 @@ namespace Hikingyo\Ovh\Tests\EndPoint\Domain;
 
 use Hikingyo\Ovh\EndPoint\Domain\NamedResolutionFieldTypeEnum;
 use Hikingyo\Ovh\EndPoint\Domain\Zone;
-use Hikingyo\Ovh\Exception\ResourceNotFoundException;
+use Hikingyo\Ovh\HttpClient\Exception\ResourceNotFoundException;
 use Hikingyo\Ovh\Tests\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -69,20 +69,38 @@ class ZoneTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    public function testICanGetRecordsForAGivenSubDomain()
+    {
+        $expected = [
+            5025087199,
+        ];
+
+        /** @var MockObject|Zone $api */
+        $api = $this->getApiMock();
+        $api->expects($this->once())
+            ->method('get')
+            ->with('/domain/zone/hikingyo.com/record', ['subDomain' => 'www'])
+            ->willReturn($expected)
+        ;
+
+        $actual = $api->getRecords('hikingyo.com', null, 'www');
+        $this->assertEquals($expected, $actual);
+    }
+
     public function testWhenIGetRecordOfAZoneICanNotAccessIGetAMessage()
     {
         /** @var MockObject|Zone $api */
         $api = $this->getApiMock();
         $api->expects($this->once())
             ->method('get')
-            ->with('/domain/zone/hikingyo.com/record')
+            ->with('/domain/zone/google.com/record')
             ->willThrowException(new ResourceNotFoundException('This service does not exist'))
         ;
 
         $this->expectException(ResourceNotFoundException::class);
         $this->expectExceptionMessage('This service does not exist');
 
-        $api->getRecords('hikingyo.com');
+        $api->getRecords('google.com');
     }
 
     public function testICanListZones(): void

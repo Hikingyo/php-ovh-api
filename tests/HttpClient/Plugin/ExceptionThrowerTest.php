@@ -7,8 +7,8 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use Hikingyo\Ovh\Client;
-use Hikingyo\Ovh\Exception\ResourceNotFoundException;
-use Hikingyo\Ovh\Exception\RuntimeException;
+use Hikingyo\Ovh\HttpClient\Exception\ResourceNotFoundException;
+use Hikingyo\Ovh\HttpClient\Exception\RuntimeException;
 use PHPUnit\Framework\TestCase;
 
 /**
