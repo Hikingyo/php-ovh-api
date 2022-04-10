@@ -60,10 +60,14 @@ class Client
     public function setEndPoint(string $apiEndpoint): void
     {
         if (preg_match('#^https?:\/\/..*#', $apiEndpoint)) {
+            if (!in_array($apiEndpoint, self::ENDPOINTS, true)) {
+                throw new InvalidParameterException(sprintf('Invalid endpoint: %s', $apiEndpoint));
+            }
+
             $endpoint = $apiEndpoint;
         } else {
             if (!array_key_exists($apiEndpoint, self::ENDPOINTS)) {
-                throw new InvalidParameterException('Unknown provided endpoint');
+                throw new InvalidParameterException(sprintf('Invalid endpoint: %s', $apiEndpoint));
             }
 
             $endpoint = self::ENDPOINTS[$apiEndpoint];
@@ -106,11 +110,17 @@ class Client
     //                             End Points Level 1                              //
     // //////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * @codeCoverageIgnore because the test brings nothing more than a coverage
+     */
     public function auth(): Auth
     {
         return new Auth($this);
     }
 
+    /**
+     * @codeCoverageIgnore because the test brings nothing more than a coverage
+     */
     public function domain(): Domain
     {
         return new Domain($this);
