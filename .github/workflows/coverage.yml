@@ -1,5 +1,10 @@
 name: Coverage
-on: [push, pull_request]
+on:
+  push:
+    branches-ignore:
+      - master
+      - develop
+    pull-request: true
 jobs:
   run:
     runs-on: ubuntu-latest

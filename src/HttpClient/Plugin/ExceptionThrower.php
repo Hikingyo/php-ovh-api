@@ -20,14 +20,14 @@ class ExceptionThrower implements Plugin
              * @throws HttpExceptionInterface
              */
             function (ResponseInterface $response): ResponseInterface {
-                $response = new ApiResponse($response);
-                $statusCode = $response->getStatusCode();
+                $apiResponse = new ApiResponse($response);
+                $statusCode = $apiResponse->getStatusCode();
 
                 if ($statusCode >= 400 && $statusCode < 600) {
-                    throw self::createException($statusCode, $response->getErrorMessage() ?? $response->getReasonPhrase());
+                    throw self::createException($statusCode, $apiResponse->getErrorMessage() ?? $apiResponse->getReasonPhrase());
                 }
 
-                return $response->getResponse();
+                return $apiResponse->getResponse();
             }
         );
     }

@@ -46,16 +46,16 @@ information about installing HTTPlug related packages.
 
 ```php
 <?php
-$api = new \Ovh\Api();
-$api->setEndpoint('ovh-eu');
+$client = new Hikingyo\Ovh\Client();
+$client->setEndpoint('ovh-eu');
 
-$time = $api->auth()->time();
+$time = $client->auth()->time();
 
 // Some endpoint need authentication
 // See https://docs.ovh.com/gb/en/api/first-steps-with-ovh-api/ to get your consumer key and secret
-$api->authenticate('<your_application_key>', '<your_application_secret>', '<your_consumer_key>');
+$client->authenticate('<your_application_key>', '<your_application_secret>', '<your_consumer_key>');
 
-$domains = $api->domain()->list()
+$domains = $client->domain()->list()
 ```
 
 ### HTTP Client Factory
@@ -67,9 +67,9 @@ the HTTP client. For example, to customize the user agent:
 $plugin = new Http\Client\Common\Plugin\HeaderSetPlugin([
     'User-Agent' => 'Foobar',
 ]);
-$builder = new Hikingyo\Ovh\HttpClient\HttpClientFactory();
-$builder->addPlugin($plugin);
-$client = new Hikingyo\Ovh\Client($builder);
+$factory = new Hikingyo\Ovh\HttpClient\HttpClientFactory();
+$factory->addPlugin($plugin);
+$client = new Hikingyo\Ovh\Client($factory);
 ```
 
 One can read more about HTTPlug

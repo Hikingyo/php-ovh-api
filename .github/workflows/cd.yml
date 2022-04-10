@@ -1,6 +1,11 @@
 name: BUILD
 
-on: [push, pull_request]
+on:
+  push:
+    branches-ignore:
+      - master
+      - develop
+    pull-request: true
 
 jobs:
   cd:
@@ -20,7 +25,16 @@ jobs:
         extensions: json
 
     - name: Install dependencies
-      run: make install
+      run: composer install --prefer-dist --no-interaction
 
-    - name: Run CD
-      run: make cd
+    - name: Lint
+      run: find src -name "*.php" -print0 | xargs -0 -n1 -P8 php -l > /dev/null
+
+    - name: Run PhpStan
+      run: php vendor/bin/phpstan analyse --quiet
+
+    - name: Run Rector
+      run: php vendor/bin/rector --dry-run --no-ansi --no-diffs --no-progress-bar
+
+    - name: Run PhpCsFixer
+      run: php vendor/bin/php-cs-fixer fix --dry-run -q
