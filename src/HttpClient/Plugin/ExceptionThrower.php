@@ -2,10 +2,10 @@
 
 namespace Hikingyo\Ovh\HttpClient\Plugin;
 
-use Hikingyo\Ovh\Exception\HttpExceptionInterface;
-use Hikingyo\Ovh\Exception\ResourceNotFoundException;
-use Hikingyo\Ovh\Exception\RuntimeException;
 use Hikingyo\Ovh\HttpClient\ApiResponse;
+use Hikingyo\Ovh\HttpClient\Exception\HttpExceptionInterface;
+use Hikingyo\Ovh\HttpClient\Exception\ResourceNotFoundException;
+use Hikingyo\Ovh\HttpClient\Exception\RuntimeException;
 use Http\Client\Common\Plugin;
 use Http\Promise\Promise;
 use Psr\Http\Message\RequestInterface;

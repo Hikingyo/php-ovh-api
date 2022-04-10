@@ -3,41 +3,40 @@
 namespace Hikingyo\Ovh\EndPoint;
 
 use Hikingyo\Ovh\Client;
-use Hikingyo\Ovh\Exception\InvalidParameterException;
 use Hikingyo\Ovh\Exception\NeedAuthenticationException;
 use Hikingyo\Ovh\HttpClient\ApiResponse;
-use Hikingyo\Ovh\HttpClient\QueryStringBuilder;
+use Hikingyo\Ovh\HttpClient\QueryFragmentBuilder;
 use Http\Client\Exception;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class AbstractEndPoint
 {
     private Client $client;
 
-    public function __construct(Client $client)
+    private QueryFragmentBuilder $queryStringBuilder;
+
+    public function __construct(Client $client, QueryFragmentBuilder $queryFragmentBuilder = null)
     {
         $this->client = $client;
+        $this->queryStringBuilder = $queryFragmentBuilder ?? new QueryFragmentBuilder();
     }
 
     /**
      * @throws Exception
-     * @throws InvalidParameterException
      */
-    protected function get(string $uri, array $params = [], array $headers = [], bool $needAuthentication = true)
+    protected function get(string $url, array $params = [], array $headers = [], bool $needAuthentication = true)
     {
-        if ($needAuthentication && !$this->isAuthenticated()) {
+        if ($needAuthentication && !$this->client->getHttpClientFactory()->hasAuthentication()) {
             throw new NeedAuthenticationException();
         }
 
-        $response = $this->client->getHttpClient()->get($this->prepareUri($uri, $params), $headers);
+        $uri = $this->client->getHttpClientFactory()->getUriFactory()->createUri($url);
+        $uri->withFragment($this->prepareFragments($params));
+
+        $response = $this->client->getHttpClient()->get($uri, $headers);
+
         $response = new ApiResponse($response);
 
         return $response->getContent();
-    }
-
-    protected function getOptionResolver(): OptionsResolver
-    {
-        return new OptionsResolver();
     }
 
     protected function getClient(): Client
@@ -45,17 +44,12 @@ abstract class AbstractEndPoint
         return $this->client;
     }
 
-    private function prepareUri(string $uri, array $params): string
+    private function prepareFragments(array $params): string
     {
         $params = array_filter($params, static function ($value): bool {
             return null !== $value;
         });
 
-        return sprintf('%s%s', $uri, QueryStringBuilder::build($params));
-    }
-
-    private function isAuthenticated(): bool
-    {
-        return $this->client->getHttpClientFactory()->hasAuthentication();
+        return $this->queryStringBuilder->buildFragments($params);
     }
 }

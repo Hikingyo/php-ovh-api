@@ -4,7 +4,7 @@ help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 test: ## unit test
-	vendor/bin/phpunit
+	vendor/bin/phpunit --log-junit report/unit/logs/phpunit.xml
 
 style-fix: ## fix code style with php-cs-fixer
 	vendor/bin/php-cs-fixer fix --verbose --show-progress=dots
@@ -24,8 +24,8 @@ stan: ## Analyse code with Stan
 lint: ## Checks if code contains syntax errors
 	find src -name "*.php" -print0 | xargs -0 -n1 -P8 php -l > /dev/null
 
-phpmetrics: ## Analyse code with PHP Metrics
-	vendor/bin/phpmetrics --config=phpmetrics.json
+phpmetrics: test ## Analyse code with PHP Metrics
+	vendor/bin/phpmetrics --config=phpmetrics.json --junit=report/unit/logs/phpunit.xml
 
 cd: lint stan rector style test ## run all checks
 

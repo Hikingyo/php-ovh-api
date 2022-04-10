@@ -4,6 +4,7 @@ namespace Hikingyo\Ovh;
 
 use Hikingyo\Ovh\EndPoint\Auth\Auth;
 use Hikingyo\Ovh\EndPoint\Domain\Domain;
+use Hikingyo\Ovh\EndPoint\Service\Service;
 use Hikingyo\Ovh\Exception\InvalidParameterException;
 use Hikingyo\Ovh\HttpClient\HttpClientFactory;
 use Hikingyo\Ovh\HttpClient\Plugin\Authentication;
@@ -124,5 +125,13 @@ class Client
     public function domain(): Domain
     {
         return new Domain($this);
+    }
+
+    /**
+     * @codeCoverageIgnore because the test brings nothing more than a coverage
+     */
+    public function service(): Service
+    {
+        return new Service($this);
     }
 }

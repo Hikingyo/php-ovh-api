@@ -2,6 +2,8 @@
 
 namespace Hikingyo\Ovh\Exception;
 
-class NeedAuthenticationException extends \RuntimeException
+use RuntimeException;
+
+class NeedAuthenticationException extends RuntimeException
 {
 }

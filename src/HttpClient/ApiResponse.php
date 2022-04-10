@@ -29,17 +29,6 @@ class ApiResponse
         $this->response = $response;
     }
 
-    public function ArrayJsonEncode(array $value): string
-    {
-        try {
-            $json = json_encode($value, JSON_THROW_ON_ERROR);
-        } catch (JsonException $jsonException) {
-            throw new RuntimeException(sprintf('Error while encode array into json: %s', $jsonException->getMessage()), $jsonException->getCode(), $jsonException);
-        }
-
-        return $json;
-    }
-
     public function getErrorMessage(): ?string
     {
         try {
@@ -87,11 +76,9 @@ class ApiResponse
     {
         $contents = $this->response->getBody()->getContents();
 
-        if (!in_array(
-            $contents,
-            ['', 'null', 'true', 'false'],
-            true
-        ) && 0 === strpos($this->response->getHeaderLine('Content-Type'), 'application/json')) {
+        $emptyOrNullOrBoolean = in_array($contents, ['', 'null', 'true', 'false'], true);
+        $isJson = 0 === strpos($this->response->getHeaderLine('Content-Type'), 'application/json');
+        if (!$emptyOrNullOrBoolean && $isJson) {
             return $this->jsonDecode($contents);
         }
 
@@ -129,21 +116,21 @@ class ApiResponse
 
     private function stringify(array $message): string
     {
-        $errors = [];
+        $contents = [];
 
         foreach ($message as $field => $messages) {
             if (is_array($messages)) {
-                $messages = array_unique($messages);
-                foreach ($messages as $message) {
-                    $errors[] = sprintf(self::FORMAT, $field, $message);
+                $filteredMessages = array_unique($messages);
+                foreach ($filteredMessages as $filteredMessage) {
+                    $contents[] = sprintf(self::FORMAT, $field, $filteredMessage);
                 }
             } elseif (is_int($field)) {
-                $errors[] = $messages;
+                $contents[] = $messages;
             } else {
-                $errors[] = sprintf(self::FORMAT, $field, $messages);
+                $contents[] = sprintf(self::FORMAT, $field, $messages);
             }
         }
 
-        return implode(', ', $errors);
+        return implode(', ', $contents);
     }
 }

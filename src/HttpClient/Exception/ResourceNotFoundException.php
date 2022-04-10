@@ -1,6 +1,6 @@
 <?php
 
-namespace Hikingyo\Ovh\Exception;
+namespace Hikingyo\Ovh\HttpClient\Exception;
 
 class ResourceNotFoundException extends RuntimeException
 {

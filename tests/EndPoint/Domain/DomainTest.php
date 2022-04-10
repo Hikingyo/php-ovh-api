@@ -11,7 +11,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class DomainTest extends TestCase
 {
-    public function testItShouldReturnListOfAvailableDomain()
+    public function testItShouldReturnListOfAvailableDomain(): void
     {
         $expected = [
             'domain.com',
@@ -27,6 +27,26 @@ class DomainTest extends TestCase
         ;
 
         $actual = $api->list();
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testItShouldReturnListOfAvailableDomainForAGivenOwner(): void
+    {
+        $expected = [
+            'domain.com',
+            'domain2.com',
+        ];
+
+        /** @var Domain|MockObject $api */
+        $api = $this->getApiMock();
+        $api->expects($this->once())
+            ->method('get')
+            ->with('/domain', ['whoisOwner' => 'owner'])
+            ->willReturn($expected)
+        ;
+
+        $actual = $api->list('owner');
 
         $this->assertEquals($expected, $actual);
     }
